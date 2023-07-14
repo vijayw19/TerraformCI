@@ -2,8 +2,8 @@ terraform {
   required_version = ">=1.3.7"
   required_providers {
     azurerm = {
-        source = "hashicorp/azurerm"
-        version = "3.43.0"
+      source  = "hashicorp/azurerm"
+      version = "3.43.0"
     }
   }
   cloud {
@@ -17,12 +17,12 @@ terraform {
 }
 
 provider "azurerm" {
-    features {}
-    skip_provider_registration = true
+  features {}
+  skip_provider_registration = true
 }
 
 resource "azurerm_resource_group" "rg" {
-    name = "dt-rg-001"
-    location = "East US"
-  
+  name     = "dt-rg-001"
+  location = "East US"
+
 }
