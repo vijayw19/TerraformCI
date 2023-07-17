@@ -26,3 +26,15 @@ resource "azurerm_resource_group" "rg" {
   location = "East US"
 
 }
+
+resource "azurerm_storage_account" "this" {
+  name = dt-sg-account
+  resource_group_name = rg.name
+  location = azurerm_resource_group.location
+  access_tier = "Standard"
+  account_replication_type = "GRS"
+  tags = {
+    enviornment = "development"
+  }
+  
+}
