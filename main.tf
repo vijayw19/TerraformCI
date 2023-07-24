@@ -6,13 +6,6 @@ terraform {
       version = "3.43.0"
     }
   }
-  cloud {
-    organization = "amviorg"
-
-    workspaces {
-      name = "dev-workspace"
-    }
-  }
 
 }
 
@@ -22,19 +15,26 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "dt-rg-001"
+  name     = "st-rg-001"
   location = "East US"
 
 }
 
-resource "azurerm_storage_account" "storage" {
-  name                     = "amvidevstgaccount"
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = azurerm_resource_group.rg.location
-  account_tier             = "Standard"
-  account_replication_type = "GRS"
-  tags = {
-    enviornment = "development"
-  }
+/*module "amvistorageaccounts" {
+  source              = "app.terraform.io/amviorg/amvistorageaccounts/azurerm"
+  version             = "1.0.0"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  environment         = "Production"
+  storageaccountname  = "amvisitstgaccount"
+}*/
 
+module "amvistorageaccounts" {
+  source              = "github.com/AmviTFModules/terraform-azurerm-amvistorageaccounts"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  environment         = "Production"
+  storageaccountname  = "amvisitstgaccount"
 }
+
+
