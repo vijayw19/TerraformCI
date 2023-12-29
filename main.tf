@@ -22,19 +22,19 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "rg" {
-  name     = "dt-rg-001"
+  name     = "dev-rg-001"
   location = "East US"
 
 }
 
 resource "azurerm_storage_account" "storage" {
-  name                     = "amvidevstgaccount"
+  name                     = "amvisitstgaccount"
   resource_group_name      = azurerm_resource_group.rg.name
   location                 = azurerm_resource_group.rg.location
   account_tier             = "Standard"
   account_replication_type = "GRS"
   tags = {
-    enviornment = "development"
+    enviornment = "testing"
   }
 
 }
