@@ -10,7 +10,7 @@ terraform {
     organization = "amviorg"
 
     workspaces {
-      name = "dev-workspace"
+      name = "TerraformCI"
     }
   }
 
@@ -34,7 +34,7 @@ resource "azurerm_storage_account" "storage" {
   account_tier             = "Standard"
   account_replication_type = "GRS"
   tags = {
-    enviornment = "testing"
+    enviornment = "development"
   }
 
 }
