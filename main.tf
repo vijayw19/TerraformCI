@@ -1,40 +1,17 @@
-terraform {
-  required_version = ">=1.3.7"
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.43.0"
-    }
-  }
-  cloud {
-    organization = "amviorg"
 
-    workspaces {
-      name = "TerraformCI"
-    }
-  }
 
-}
+/* module "amviresourcegroups" {
+  source = "github.com/AmviTFModules/terraform-azurerm-amvi-resource-group"
 
-provider "azurerm" {
-  features {}
-  skip_provider_registration = true
-}
+  name = var.rg_name
+
+} */
 
 resource "azurerm_resource_group" "rg" {
-  name     = "dev-rg-001"
-  location = "East US"
+  for_each = var.resource_groups
 
+  name     = each.value.name
+  location = each.value.location
+  tags     = each.value.tags
 }
 
-resource "azurerm_storage_account" "storage" {
-  name                     = "amvisitstgaccount"
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = azurerm_resource_group.rg.location
-  account_tier             = "Standard"
-  account_replication_type = "GRS"
-  tags = {
-    enviornment = "development"
-  }
-
-}
