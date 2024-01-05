@@ -1,40 +1,33 @@
-terraform {
-  required_version = ">=1.3.7"
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "3.43.0"
-    }
-  }
-  cloud {
-    organization = "amviorg"
-
-    workspaces {
-      name = "dev-workspace"
-    }
-  }
-
-}
-
-provider "azurerm" {
-  features {}
-  skip_provider_registration = true
-}
-
 resource "azurerm_resource_group" "rg" {
-  name     = "dev-rg-001"
-  location = "East US"
+  for_each = var.resource_groups
 
+  name     = each.value.name
+  location = each.value.location
 }
+
+
+locals {
+  env_tags = {
+    dev  = "development"
+    stg  = "staging"
+    prod = "production"
+  }
+}
+
 
 resource "azurerm_storage_account" "storage" {
-  name                     = "amvisitstgaccount"
-  resource_group_name      = azurerm_resource_group.rg.name
-  location                 = azurerm_resource_group.rg.location
-  account_tier             = "Standard"
+  for_each = var.resource_groups
+
+  depends_on = [ azurerm_resource_group.rg ]
+  name                     = local.env_tags.dev != "production" ? "amvinonprodaccount" : "amviprodaccount"
+  resource_group_name      = azurerm_resource_group.rg[each.key].name
+  location                 = azurerm_resource_group.rg[each.key].location
+  account_tier             = each.value.tags != "dev" ? "Standard" : "Premium"
   account_replication_type = "GRS"
   tags = {
-    enviornment = "testing"
+    environment = "development"
   }
-
+  lifecycle {
+    create_before_destroy = true
+  }
 }
