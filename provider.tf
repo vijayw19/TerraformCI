@@ -6,6 +6,16 @@ terraform {
       version = "~>3.43.0"
     }
   }
+  backend "azurerm" {
+    
+    resource_group_name  = "rg-backend"
+    storage_account_name = "amvidevstgaccount"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
+
+  }
+
+
 }
 
 

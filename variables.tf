@@ -6,7 +6,15 @@ variable "resource_groups" {
   }))
   default = {
     rg1 = {
-      name     = "rg-development"
+      name     = "rg-backend"
+      location = "East US"
+      tags = {
+        enviornment = "dev"
+        BU          = "learning"
+      }
+    }
+    rg2 = {
+      name     = "rg-learning"
       location = "East US"
       tags = {
         enviornment = "dev"
